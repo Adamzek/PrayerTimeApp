@@ -1,29 +1,47 @@
-import { useEffect, useState } from 'react'
-import './App.css'
+import { useEffect, useState } from 'react';
+import ZoneSelector from './Components/ZoneSelector';
+import PrayerTimesTable from './Components/PrayerTimesTable';
+import './App.css';
 
 function App() {
     const [prayerTimes, setPrayerTimes] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [zones, setZones] = useState([]);
+    const [selectedZone, setSelectedZone] = useState("SGR01");
 
+    // Fetch available zones for dropdown
     useEffect(() => {
-        fetch("http://localhost:6969/api/prayertimes?zone=SGR01")
-            .then(response => response.json())
-            .then(data => setPrayerTimes(data.prayerTime)) //data.prayerTime is the array of prayer times   
+        fetch("http://localhost:6969/api/prayertimes/zones")
+            .then(res => res.json())
+            .then(data => setZones(data))
             .catch(error => console.error(error));
-    }, []); //dependancy array
+    }, []);
 
+    // Fetch prayer times when selectedZone changes
+    useEffect(() => {
+        setLoading(true);
+        fetch(`http://localhost:6969/api/prayertimes?zone=${selectedZone}`) //data.prayerTime is the array of prayer times 
+            .then(res => res.json())
+            .then(data => setPrayerTimes(data.prayerTime))
+            .catch(error => console.error(error))
+            .finally(() => setLoading(false));
+    }, [selectedZone]); //dependancy array
 
-  return (
-    <div>
-          <h1>Prayer Times</h1>
-          <ul>
-              {prayerTimes.map((p, index) => (  //.map() iterates over all elements in array
-                  <li key={index}>
-                      {p.date} , { p.fajr }
-                  </li>
-              ))}
-          </ul>
-    </div>
-  )
+    if (loading) return <p className="text-center mt-4">Loading prayer times...</p>;
+
+    return (
+        <div className="bg-black max-w-5xl mx-auto mt-10 p-4 rounded-2xl text-white">
+            <h1 className="text-2xl font-bold text-center mb-6">Prayer Times</h1>
+            <ZoneSelector
+                zones={zones}
+                selectedZone={selectedZone}
+                onZoneChange={setSelectedZone}
+            />
+            <div className="overflow-x-auto shadow-md rounded-lg">
+                <PrayerTimesTable prayerTimes={prayerTimes} />
+            </div>
+        </div>
+    );
 }
 
-export default App
+export default App;
