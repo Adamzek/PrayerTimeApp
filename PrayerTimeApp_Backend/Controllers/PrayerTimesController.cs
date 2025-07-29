@@ -1,8 +1,8 @@
 //ROUTE HANDLER TO FETCH PRAYER TIMES
 // This controller handles requests related to prayer times, fetching data from an external API and returning it
 
-using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+using Microsoft.AspNetCore.Mvc; // this namespace provides classes and attributes for building web APIs
+using System.Text.Json; // this namespace provides functionality for JSON serialization and deserialization
 
 
 [ApiController] //attribute that indicates this class is an API controller
@@ -13,7 +13,7 @@ public class PrayerTimesController : ControllerBase  // This controller handles 
 
     public PrayerTimesController(IHttpClientFactory httpClientFactory)
     {
-        _http = httpClientFactory.CreateClient();
+        _http = httpClientFactory.CreateClient(); 
     }
 
     // Example: GET /api/prayertimes?zone=SGR01&year=2025&month=7
@@ -22,7 +22,7 @@ public class PrayerTimesController : ControllerBase  // This controller handles 
     {
         try
         {
-            // 
+            // logic to fetch prayer times from an external API
             var apiUrl = $"https://api.waktusolat.app/solat/{zone}";
             if (year.HasValue && month.HasValue)
                 apiUrl += $"?year={year}&month={month}";
