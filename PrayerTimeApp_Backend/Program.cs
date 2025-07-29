@@ -3,8 +3,8 @@ using Microsoft.OpenApi.Models; // This namespace provides classes for setting u
 
 var builder = WebApplication.CreateBuilder(args);  //Think of it like gathering all the tools and materials before building a house.
 
-//CONFIGURE SERVICES 
-//dependency injection container, which is like a toolbox that holds all the services your application will use.
+//DI CONTAINER = TOOLBOX
+//SERVICES = TOOLS 
 
 //builder.Services.AddControllers();  // ← this tells .NET to look for controller classes
 builder.Services.AddEndpointsApiExplorer(); // defines the API endpoints and their metadata, making it easier to explore and document the API.
@@ -44,6 +44,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+//ENDPOINTS = ROUTES = PATH = MIDDLEWARE 
+
 //app.MapControllers(); // ← this maps your PrayerTimesController to the routing system
 
 app.MapGet("/", () => "Hello World!"); //It's like setting a rule: "If someone knocks on the front door, say Hello!"
@@ -73,5 +75,6 @@ app.MapGet("/api/prayertimes", async (HttpClient http, string zone = "SGR01", in
     }
 });
 
-app.Run(); //This starts the web server and begins listening for requests (like when someone visits your site).Like opening your house for visitors.
+//START THE SERVER = LISTEN FOR REQUESTS = OPEN THE DOOR FOR VISITORS
+app.Run();
 
