@@ -7,7 +7,7 @@ function App() {
     useEffect(() => {
         fetch("http://localhost:6969/api/prayertimes?zone=SGR01")
             .then(response => response.json())
-            .then(data => setPrayerTimes(data.prayerTime)) //data.prayerTime is the array of prayer times   
+            .then(data => setPrayerTimes(data.prayerTime))
             .catch(error => console.error(error));
     }, []); //dependancy array
 
