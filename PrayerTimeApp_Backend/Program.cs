@@ -47,8 +47,8 @@ if (app.Environment.IsDevelopment())
 //ENDPOINTS = ROUTES = PATH = MIDDLEWARE 
 
 //app.MapControllers(); // ← this maps your PrayerTimesController to the routing system
-
-app.MapGet("/", () => "Hello World!"); //It's like setting a rule: "If someone knocks on the front door, say Hello!"
+app.MapGet("/", () => Results.Redirect("/Home"));
+app.MapGet(("/Home"), () => "Hello from Homepage"); //It's like setting a rule: "If someone knocks on the front door, say Hello!"
 
 // Example: GET /api/prayertimes?zone=SGR01&year=2025&month=7
 app.MapGet("/api/prayertimes", async (HttpClient http, string zone = "SGR01", int? year = null, int? month = null) => {
@@ -57,10 +57,9 @@ app.MapGet("/api/prayertimes", async (HttpClient http, string zone = "SGR01", in
         var apiUrl = $"https://api.waktusolat.app/solat/{zone}";
         if (year.HasValue && month.HasValue)
             apiUrl += $"?year={year}&month={month}";
-
         var response = await http.GetAsync(apiUrl);
 
-        if (!response.IsSuccessStatusCode)
+        if (!response.IsSuccessStatusCode) 
             return Results.StatusCode((int)response.StatusCode);
 
         var json = await response.Content.ReadAsStringAsync();
@@ -73,6 +72,18 @@ app.MapGet("/api/prayertimes", async (HttpClient http, string zone = "SGR01", in
     {
         return Results.Problem($"Something went wrong: {ex.Message}", statusCode: 500);
     }
+});
+
+app.MapGet("/api/prayertimes/zones", async (HttpClient http) =>
+{
+    var apiUrl = "https://api.waktusolat.app/zones"; 
+    var response = await http.GetAsync(apiUrl);
+
+    if (!response.IsSuccessStatusCode)
+        return Results.StatusCode((int)response.StatusCode);
+
+    var json = await response.Content.ReadAsStringAsync();
+    return Results.Content(json, "application/json");
 });
 
 //START THE SERVER = LISTEN FOR REQUESTS = OPEN THE DOOR FOR VISITORS
