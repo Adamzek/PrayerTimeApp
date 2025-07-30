@@ -1,4 +1,4 @@
-function PrayerTimesTable({ prayerTimes }) {
+ function PrayerTimesTable({ prayerTimes }) {
   return (
     <table className="min-w-full text-sm text-left">
       <thead className="bg-gray-800 border-b">

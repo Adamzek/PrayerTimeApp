@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import ZoneSelector from './Components/ZoneSelector';
 import PrayerTimesTable from './Components/PrayerTimesTable';
+import CurrentTime from  './Components/CurrentTime';
+import NextPrayer from  './Components/NextPrayer';
 import './App.css';
 
 function App() {
@@ -32,6 +34,8 @@ function App() {
     return (
         <div className="bg-black max-w-5xl mx-auto mt-10 p-4 rounded-2xl text-white">
             <h1 className="text-2xl font-bold text-center mb-6">Prayer Times</h1>
+            <CurrentTime className="text-white text-lg mb-4">Current Time: </CurrentTime>
+            <NextPrayer prayerTimes={prayerTimes} />
             <ZoneSelector
                 zones={zones}
                 selectedZone={selectedZone}
